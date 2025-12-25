@@ -1,0 +1,12 @@
+﻿body
+{
+}
+form {
+    width: 25%;
+}
+
+    form > div {
+        text-align: right;
+        border: solid 1px;
+        margin: 10px;
+    }
