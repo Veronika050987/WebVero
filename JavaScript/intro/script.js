@@ -1,10 +1,10 @@
-// JavaScript source code
+п»ї// JavaScript source code
 
 function Factorial(n)
 {
-    let f = Bigint(1);
+    let f = BigInt(1);
     // document.write(typeof (f));
-    /// document.write("<pre>"); // учитываются пробелы и знаки переноса
+    /// document.write("<pre>"); // СѓС‡РёС‚С‹РІР°СЋС‚СЃСЏ РїСЂРѕР±РµР»С‹ Рё Р·РЅР°РєРё РїРµСЂРµРЅРѕСЃР°
     for (let i = 1n; i <= n; i++)
     {
         f *= i;
@@ -17,7 +17,7 @@ function Factorial(n)
 function Factorial2()
 {
     let source_input_field = document.getElementById("factorial-source");
-    // alert("Привет");
+    // alert("РџСЂРёРІРµС‚");
     let source_value = source_input_field.value;
     let factorial_result = document.getElementById("factorial-result");
     factorial_result.innerHTML = Factorial(source_value);
