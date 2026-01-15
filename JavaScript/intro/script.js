@@ -62,3 +62,87 @@ document.addEventListener('DOMContentLoaded', () => {
     // Также запускаем расчет при первом входе (для отображения значения по умолчанию)
     handleCalculation();
 });
+
+//---
+//Последовательность Фебоначчи
+//---
+
+/**
+ * Генерирует массив с первыми N числами ряда Фибоначчи.
+ * (Остается без изменений)
+ */
+function generateFibonacci(n)
+{
+    console.log(`--- Запуск генерации для N = ${n} ---`); // <-- ЛОГ 1
+
+    if (n <= 0) {
+        console.log("N <= 0, возвращаем пустой массив."); // <-- ЛОГ 2
+        return [];
+    }
+
+    if (n === 1) {
+        console.log("N = 1, возвращаем [0]."); // <-- ЛОГ 3
+        return [0];
+    }
+
+    let sequence = [0, 1];
+
+    for (let i = 2; i < n; i++) {
+        const nextNumber = sequence[i - 1] + sequence[i - 2];
+        sequence.push(nextNumber);
+    }
+
+    console.log("Генерация завершена. Массив:", sequence); // <-- ЛОГ 4
+    return sequence;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const countInput = document.getElementById('count');
+    const limitPresetSelect = document.getElementById('limitPreset');
+    const generateButton = document.getElementById('generateButton');
+    const result = document.getElementById('result');
+
+    const MAX_COUNT = 50;
+
+    function getCountFromInputs() {
+        const selectedValue = limitPresetSelect.value;
+        if (selectedValue) {
+            return parseInt(selectedValue);
+        }
+        return parseInt(countInput.value);
+    }
+
+    function handleGeneration() {
+        let count = getCountFromInputs();
+        console.log(`Полученное значение для генерации: ${count}`); // <-- ЛОГ 5
+
+        // 1. Проверка на корректность
+        if (isNaN(count) || count < 1) {
+            result.textContent = "Пожалуйста, введите положительное целое число.";
+            return;
+        }
+
+        // 2. Применяем ограничение
+        if (count > MAX_COUNT) {
+            count = MAX_COUNT;
+            limitPresetSelect.value = MAX_COUNT.toString();
+            countInput.value = MAX_COUNT;
+        }
+
+        // 3. Генерируем ряд
+        const fibSequence = generateFibonacci(count);
+
+        // 4. Форматируем и выводим
+        const outputString = fibSequence.join(', ');
+        console.log(`Выводимая строка: "${outputString}"`); // <-- ЛОГ 6
+
+        result.textContent = outputString;
+    }
+
+    generateButton.addEventListener('click', handleGeneration);
+    limitPresetSelect.addEventListener('change', handleGeneration);
+    countInput.addEventListener('input', handleGeneration);
+
+    // Запускаем генерацию при первой загрузке
+    handleGeneration();
+});
