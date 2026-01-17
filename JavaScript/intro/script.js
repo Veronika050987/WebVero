@@ -63,12 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
     handleCalculation();
 });
 
-//function Power() {
-//    let number = document.getElementById("number-for-power").value;
-//    let power = document.getElementById("power-for-number").value;
-//    let result = document.getElementById("power-result");
-//    result.innerHTML = Math.pow(number, power);
-}
+////function Power() {
+////    let number = document.getElementById("number-for-power").value;
+////    let power = document.getElementById("power-for-number").value;
+////    let result = document.getElementById("power-result");
+////    result.innerHTML = Math.pow(number, power);
+//}//
 
 //---
 //Последовательность Фебоначчи
@@ -193,3 +193,44 @@ function NumberCountFib() {
         }
     }
 }
+
+/*number system*/
+
+function decimalToBinary()
+{
+    let number = document.getElementById("decimal-to-binary").value;
+    let result = document.getElementById("decimal-to-binary-result");
+    result.innerHTML = Number(number).toString(2);
+}
+
+function decimalToHexadecimal()
+{
+    let number = document.getElementById("decimal-to-hexadecimal").value;
+    let result = document.getElementById("decimal-to-hexadecimal-result");
+    result.innerHTML = Number(number).toString(16);
+}
+
+function binaryToDecimal()
+{
+    let number = document.getElementById("binary-to-decimal").value;
+    let result = document.getElementById("binary-to-decimal-result");
+    result.innerHTML = parseInt(number, 2);
+}
+function binaryToHexadecimal()
+{
+    let number = document.getElementById("binary-to-hexadecimal").value;
+    let result = document.getElementById("binary-to-hexadecimal-result");
+    let decimal = parseInt(number, 2);
+    if (isNaN(decimal)) {
+        result.innerHTML = "Ошибка: Введенное значение не является корректным двоичным числом.";
+        return; // Прерываем выполнение, если ввод невалиден
+    }
+    result.innerHTML = Number(decimal).toString(16);
+}
+function hexadecimalToDecimal()
+{
+    let number = document.getElementById("hexadecimal-to-decimal").value;
+    let result = document.getElementById("hexadecimal-to-decimal-result");
+    result.innerHTML = parseInt(number, 16);
+}
+
