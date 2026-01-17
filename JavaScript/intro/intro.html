@@ -31,6 +31,13 @@
         <p id="resultOutput"></p>
     </details>
 
+    <!--<details>
+        <summary>Power</summary>
+        <input type="number" id="number-for-power" min=0 placeholder="Число" onchange="Power()" />
+        <input type="number" id="power-for-number" min=0 placeholder="Степень" onchange="Power()" />
+        <div id="power-result"></div>
+    </details>-->
+
     <details>
         <summary>Fibonacci sequence</summary>
         <h1>Генератор ряда Фибоначчи</h1>
@@ -62,6 +69,16 @@
         <h2>Результат:</h2>
         <div id="result" aria-live="polite"></div>
     </details>
+
+    <details>
+        <summary>Fibonacci 2</summary>
+        <input type="number" id="number-max-fib" min=0 placeholder="Максимальное число" onchange="NumberMaxFib()" />
+        <div id="number-max-fib-result"></div>
+
+        <input type="number" id="number-count-fib" min=0 placeholder="Количество" onchange="NumberCountFib()" />
+        <div id="number-count-fib-result"></div>
+    </details>
+
 
     <script src="script.js"></script>
     <script>

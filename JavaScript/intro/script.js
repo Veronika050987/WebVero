@@ -63,6 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
     handleCalculation();
 });
 
+//function Power() {
+//    let number = document.getElementById("number-for-power").value;
+//    let power = document.getElementById("power-for-number").value;
+//    let result = document.getElementById("power-result");
+//    result.innerHTML = Math.pow(number, power);
+}
+
 //---
 //Последовательность Фебоначчи
 //---
@@ -146,3 +153,43 @@ document.addEventListener('DOMContentLoaded', () => {
     // Запускаем генерацию при первой загрузке
     handleGeneration();
 });
+
+/*        Fibonacci 2*/
+function NumberMaxFib() {
+    let number = document.getElementById("number-max-fib").value;
+    let result = document.getElementById("number-max-fib-result");
+    result.innerHTML = "";
+    let a = 0;
+    let b = 1;
+    let next;
+    if (number != 0) {
+        result.innerHTML += `${a}, ${b}`;
+        for (let i = 0; i <= number; i += a) {
+            result.innerHTML += ", ";
+            next = a + b;
+            result.innerHTML += `${next}`;
+            a = b;
+            b = next;
+        }
+    }
+}
+
+function NumberCountFib() {
+    let number = document.getElementById("number-count-fib").value;
+    let result = document.getElementById("number-count-fib-result");
+    result.innerHTML = "";
+    let a = 0;
+    let b = 1;
+    let next;
+
+    if (number > 1) {
+        result.innerHTML += `${a}, ${b}`;
+        for (let i = 2; i < number; i++) {
+            result.innerHTML += ", ";
+            next = a + b;
+            result.innerHTML += `${next}`;
+            a = b;
+            b = next;
+        }
+    }
+}
