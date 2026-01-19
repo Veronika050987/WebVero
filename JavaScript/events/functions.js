@@ -1,4 +1,4 @@
-// JavaScript source code
+﻿// JavaScript source code
 function setImage() {
     let filename = document.getElementById("image-file");
     let reader = new FileReader();
@@ -76,5 +76,3 @@ document.body.onload = function tick_timer() {
 
     setTimeout(tick_timer, 100);
 }
-
-//////

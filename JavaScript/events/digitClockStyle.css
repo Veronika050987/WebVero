@@ -1,0 +1,37 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+body 
+{
+    font-family: Roboto Condensed;
+    font-size: 40px;
+     background-image: linear-gradient(to bottom right, lightskyblue, pink);
+    background-attachment: fixed;
+}
+
+#image-container 
+{
+    position: relative;
+    display: inline-block;
+    margin: 20px;
+}
+
+#catImage 
+{
+    display: block;
+    width: 400px;
+    height: auto;
+}
+
+#time-overlay {
+    position: absolute;
+    bottom: 300px; /* Отступ 15px от нижнего края кота */
+    right: 300px; /* Отступ 15px от правого края кота */
+    padding: 8px 12px;
+    /* Стилизация текста */
+    background-color: #B0E0E6; /* Темный полупрозрачный фон */
+    color: #4B0082;
+    font-size: 1.5em;
+    font-weight: bold;
+    border-radius: 5px;
+    font-family: monospace;
+}

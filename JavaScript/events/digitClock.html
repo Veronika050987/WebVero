@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My digital clock</title>
+    <link rel="stylesheet" href="digitClockStyle.css">
+</head>
+<body>
+    <div id="image-container">
+        <img id="myImage" src="img/kitten2.png" alt="Изображение">
+        <div id="time-overlay"></div>
+    </div>
+    <script>
+        function updateTimeOverlay()
+    {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('ru-RU'); // Формат ЧЧ:ММ:СС
+        document.getElementById('time-overlay').textContent = timeString;
+    }
+
+    setInterval(updateTimeOverlay, 1000);
+    updateTimeOverlay();
+    </script>
+</body>
+</html>
