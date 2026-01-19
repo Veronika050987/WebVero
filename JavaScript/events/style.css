@@ -79,3 +79,10 @@ input {
     width: 400px;
     height: 300px;
 }
+
+#clock {
+    font-family: Tahome, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: aquamarine;
+}
