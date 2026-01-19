@@ -16,19 +16,25 @@ function setBackground() {
     document.getElementById('color-sample').style.width = "200px";
     document.getElementById('color-sample').style.height = "200px";
 }
-function switchBackground() {
-    let target = document.getElementById("switch-background").src;
-    let path = target.split('/');
-    let file = path[path.length - 1];
+function switchBackground()
+{
+    //let target = document.getElementById("switch-background").src;
+    //let path = target.split('/');
+    //let file = path[path.length - 1];
+    /////////////////////////////////////
     //console.log(file);
     //if (file === "moon.png") document.getElementById("switch-background").src = "img/sun.png";
     //else document.getElementById("switch-background").src = "img/moon.png";
     //document.getElementById("switch-background").src = file === "moon.png" ? "img/sun.png" : "img/moon.png";
     //document.body.style.backgroundImage = "none";
-    document.body.className = file === "moon.png" ? "dark" : "white";
+    let delay = document.getElementById("delay").value;
+    document.body.style.transition = `background-image ${delay}s, color ${delay}s`;
+    document.getElementById("switch-background").style.transition = `background-image ${delay}s, filter ${delay}s`;
+    document.body.className = document.body.className === "dark" ? "white" : "dark";
+    /*document.body.className = file === "moon.png" ? "dark" : "white";*/
     //document.body.style.backgroundColor = file === "moon.png" ? "black" : "white";
     //document.body.style.color = file === "moon.png" ? "white" : "black";
-    document.getElementById("switch-background").src = `img/${file === "moon.png" ? "sun.png" : "moon.png"}`;
+    /*document.getElementById("switch-background").src = `img/${file === "moon.png" ? "sun.png" : "moon.png"}`;*/
     /*
     ---------------------
     5 == "5":true;
