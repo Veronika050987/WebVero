@@ -12,12 +12,12 @@
     <div style="display:flex;">
         <label for="delay">Delay: </label>
         <input type="number" id="delay" min="1" max="5" value="3">
-    <div onclick="switchBackground()" id="switch-background">
-        <!--<img src="img/moon.png" id="switch-background">-->
-    </div>
+        <div onclick="switchBackground()" id="switch-background">
+            <!--<img src="img/moon.png" id="switch-background">-->
+        </div>
     </div>
     <!--1-->
-        <h1>Events</h1>
+    <h1>Events</h1>
     <details>
         <summary>Image and color</summary>
         <div id="photo-and-color">
@@ -44,12 +44,11 @@
             let values = [true, false, '+', 3.14, "Hello", 2.7];
             console.log(values);
             console.table(values);
-                document.write(`<pre>`);
-            for (let i = 0; i < arr.length; i++)
-            {
+            document.write(`<pre>`);
+            for (let i = 0; i < arr.length; i++) {
                 document.write(`${arr[i]}\t`);
             }
-                document.write(`</pre>`);
+            document.write(`</pre>`);
 
             let arr2 =
                 [
@@ -61,10 +60,8 @@
             //foreach (let i : arr2) document.write(`${i}`);
             arr2.forEach((element) => document.write(element));
             document.writeln();
-            for (let i = 0; i < arr2.length; i++)
-            {
-                for (let j = 0; j < arr2[i].length; j++)
-                {
+            for (let i = 0; i < arr2.length; i++) {
+                for (let j = 0; j < arr2[i].length; j++) {
                     document.write(`${arr2[i][j]}\t`);
                 }
                 document.writeln();
@@ -83,6 +80,23 @@
             console.table(jaggedArr);
         </script>
     </details>
+    <div id="full-time"></div>
+    <div id="clock">
+        <h2>Time</h2>
+        <div id="current-time">
+            <span id="hours"></span>:
+            <span id="minutes"></span>:
+            <span id="seconds"></span>
+        </div>
+        <div id="current-date">
+            <span id="years"></span>.
+            <span id="months"></span>.
+            <span id="days"></span>
+        </div>
+        <div id="day-of-week"></div>
+        <input type="checkbox" id="show-date"><label for="show-date">Показать дату</label>
+        <input type="checkbox" id="show-weekday"><label for="show-weekday">Показать день недели</label>
+    </div>
     <script src="functions.js"></script>
 </body>
 </html>
