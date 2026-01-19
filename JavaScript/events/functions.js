@@ -42,3 +42,14 @@ function switchBackground()
     ---------------------
     */
 }
+
+document.addEventListener
+(
+        "mousemove",
+        function (event)
+        {
+            let x = event.clientX;
+            let y = event.clientY;
+            document.getElementById("mouse").innerHTML = `X = ${x}, Y = ${y}`;
+        }
+);
