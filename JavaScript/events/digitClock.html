@@ -8,19 +8,38 @@
 </head>
 <body>
     <div id="image-container">
-        <img id="myImage" src="img/kitten2.png" alt="Изображение">
+        <img id="myImage" src="img/mykitten.png" alt="Изображение">
         <div id="time-overlay"></div>
+        <div id="date-overlay" style="visibility:hidden;"></div>
+        <div id="day-overlay" style="visibility:hidden;"></div>
     </div>
+
+    <div>
+        <label><input type="checkbox" id="show-date" onclick="toggleVisibility()"> Показать дату</label>
+        <label><input type="checkbox" id="show-weekday" onclick="toggleVisibility()"> Показать день недели</label>
+    </div>
+
     <script>
         function updateTimeOverlay()
-    {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString('ru-RU'); // Формат ЧЧ:ММ:СС
-        document.getElementById('time-overlay').textContent = timeString;
-    }
+        {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU'); // Формат ЧЧ:ММ:СС
+            const dateString = now.toLocaleDateString('ru-RU'); // Формат даты
+            const dayString = now.toLocaleString('ru-RU', { weekday: 'long' }); // День недели
 
-    setInterval(updateTimeOverlay, 1000);
-    updateTimeOverlay();
+            document.getElementById('time-overlay').textContent = timeString;
+            document.getElementById('date-overlay').textContent = dateString;
+            document.getElementById('day-overlay').textContent = dayString;
+        }
+
+        function toggleVisibility()
+        {
+            document.getElementById('date-overlay').style.visibility = document.getElementById('show-date').checked ? "visible" : "hidden";
+            document.getElementById('day-overlay').style.visibility = document.getElementById('show-weekday').checked ? "visible" : "hidden";
+        }
+
+        setInterval(updateTimeOverlay, 1000);
+        updateTimeOverlay();
     </script>
 </body>
 </html>
