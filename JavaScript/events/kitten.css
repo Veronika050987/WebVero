@@ -268,7 +268,7 @@
 #time-output {
     position: absolute;
     /* Позиционируем время в центре мордочки */
-    top: 40%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgba(0, 0, 0, 0.7);
