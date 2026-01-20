@@ -1,0 +1,317 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Analogue and digital clocks</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        /* Стили для часов */
+        #clock-area {
+            position: relative;
+            width: 480px; /* Размер, соответствующий canvas */
+            height: 480px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+        }
+
+        /* Стиль для Canvas (Аналоговые часы) */
+        #myCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10; /* Аналоговые часы поверх всего */
+        }
+
+        /* Стиль для контейнера цифровых часов (будут накладываться поверх или рядом с Canvas) */
+        #digital-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Центрирование */
+            z-index: 20; /* Цифровые часы поверх Canvas */
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #20B2AA;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            display: none; /* Изначально скрыты */
+        }
+
+            #digital-display div {
+                font-size: 2em;
+                font-weight: bold;
+                font-family: monospace;
+            }
+
+        /* Стили для контейнера с котом (если он нужен) */
+        #image-container 
+        {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 5; /* Под Canvas и цифровыми часами */
+        }
+
+        #myImage 
+        {
+            width: 480px;
+            height: 480px;
+            display: block;
+        }
+
+        #time-overlay 
+        {
+            position: absolute;
+            top: 490px;
+            left: 50px;
+            z-index: 15; /* Поверх кота, но под цифровым дисплеем, если он не центрирован */
+            color: #DC143C;
+            font-family: monospace;
+            /*background-color: rgba(255, 255, 255, 0.7);*/
+            padding: 2px;
+        }
+
+        #date-overlay 
+        {
+            position: absolute;
+            top: 490px;
+            z-index: 15; /* Поверх кота, но под цифровым дисплеем, если он не центрирован */
+            color: #4682B4;
+            font-size: 22px;
+            font-family: monospace;
+            font-weight: bold;
+            /*background-color: rgba(255, 255, 255, 0.7);*/
+            padding: 2px;
+        }
+
+        #day-overlay {
+            position: absolute;
+            top: 490px;
+            left: 370px;
+            z-index: 15; /* Поверх кота, но под цифровым дисплеем, если он не центрирован */
+            color: #E91E63;
+            font-size:18px;
+            font-family: monospace;
+            font-weight: bold;
+            /*background-color: rgba(255, 255, 255, 0.7);*/
+            padding: 2px;
+            border-radius: 25px;
+        }
+
+        /* Дополнительное позиционирование для наложенных элементов на коте (по желанию) */
+        #time-overlay 
+        {
+            bottom: 20px;
+            right: 20px;
+            font-size: 22px;
+            color:blueviolet;
+        }
+    </style>
+</head>
+<body>
+    <!-- Элементы управления -->
+    <div id="controls">
+        <label>
+            <input type="checkbox" id="clock-toggle" onchange="toggleClockType()">
+            Переключить на Цифровые часы
+        </label>
+        <br><br>
+        <label><input type="checkbox" id="show-date" onchange="toggleVisibility()"> Показать дату</label>
+        <label><input type="checkbox" id="show-weekday" onchange="toggleVisibility()"> Показать день недели</label>
+    </div>
+
+    <!-- КОНТЕЙНЕР ДЛЯ ВСЕГО -->
+    <div id="clock-area">
+
+        <!-- 1. Контейнер с котом (Изображение + наложенный текст) -->
+        <div id="image-container">
+
+            <img id="myImage" src="img/mykitten.png" alt="Кот">
+            <div id="time-overlay">--:--:--</div>
+            <div id="date-overlay" style="visibility:hidden;"></div>
+            <div id="day-overlay" style="visibility:hidden;"></div>
+        </div>
+
+        <!-- 2. Canvas для аналоговых часов -->
+        <canvas height='480' width='480' id='myCanvas'></canvas>
+
+        <!-- 3. Цифровые часы (Скрыты по умолчанию) -->
+        <div id="digital-display">
+            <div id="digital-time-output">--:--:--</div>
+        </div>
+    </div>
+
+    <script>
+        function toggleVisibility()
+        {
+            document.getElementById('date-overlay').style.visibility = document.getElementById('show-date').checked ? "visible" : "hidden";
+            document.getElementById('day-overlay').style.visibility = document.getElementById('show-weekday').checked ? "visible" : "hidden";
+        }
+
+        function displayCanvas()
+        {
+            var canvasHTML = document.getElementById('myCanvas');
+            var contextHTML = canvasHTML.getContext('2d');
+            contextHTML.strokeRect(0, 0, canvasHTML.width, canvasHTML.height);
+
+            var radiusClock = canvasHTML.width / 2 - 10;
+            var xCenterClock = canvasHTML.width / 2;
+            var yCenterClock = canvasHTML.height / 2;
+
+            contextHTML.fillStyle = "#ffffff";
+            contextHTML.fillRect(0, 0, canvasHTML.width, canvasHTML.height);
+
+            contextHTML.strokeStyle = "#008000";
+            contextHTML.lineWidth = 2;
+            contextHTML.beginPath();
+            contextHTML.arc(xCenterClock, yCenterClock, radiusClock, 0, 2 * Math.PI, true);
+            contextHTML.moveTo(xCenterClock, yCenterClock);
+            contextHTML.stroke();
+            contextHTML.closePath();
+
+            var radiusNum = radiusClock - 10;
+            var radiusPoint;
+            for (var tm = 0; tm < 60; tm++) {
+                contextHTML.beginPath();
+                if (tm % 5 == 0) { radiusPoint = 5; } else { radiusPoint = 2; }
+                var xPointM = xCenterClock + radiusNum * Math.cos(-6 * tm * (Math.PI / 180) + Math.PI / 2);
+                var yPointM = yCenterClock - radiusNum * Math.sin(-6 * tm * (Math.PI / 180) + Math.PI / 2);
+                contextHTML.arc(xPointM, yPointM, radiusPoint, 0, 2 * Math.PI, true);
+                contextHTML.stroke();
+                contextHTML.closePath();
+            }
+
+            for (var th = 1; th <= 12; th++) {
+                contextHTML.beginPath();
+                contextHTML.font = 'bold 25px sans-serif';
+                var xText = xCenterClock + (radiusNum - 30) * Math.cos(-30 * th * (Math.PI / 180) + Math.PI / 2);
+                var yText = yCenterClock - (radiusNum - 30) * Math.sin(-30 * th * (Math.PI / 180) + Math.PI / 2);
+                if (th <= 9) {
+                    contextHTML.strokeText(th, xText - 5, yText + 10);
+                } else {
+                    contextHTML.strokeText(th, xText - 15, yText + 10);
+                }
+                contextHTML.stroke();
+                contextHTML.closePath();
+            }
+
+
+            var lengthSeconds = radiusNum - 10;
+            var lengthMinutes = radiusNum - 15;
+            var lengthHour = lengthMinutes / 1.5;
+            var d = new Date();
+            var t_sec = 6 * d.getSeconds();
+            var t_min = 6 * (d.getMinutes() + (1 / 60) * d.getSeconds());
+            var t_hour = 30 * (d.getHours() + (1 / 60) * d.getMinutes());
+
+            contextHTML.beginPath();
+            contextHTML.strokeStyle = "#008B8B";
+            contextHTML.moveTo(xCenterClock, yCenterClock);
+            contextHTML.lineTo(xCenterClock + lengthSeconds * Math.cos(Math.PI / 2 - t_sec * (Math.PI / 180)),
+                yCenterClock - lengthSeconds * Math.sin(Math.PI / 2 - t_sec * (Math.PI / 180)));
+            contextHTML.stroke();
+            contextHTML.closePath();
+
+            contextHTML.beginPath();
+            contextHTML.strokeStyle = "#C71585";
+            contextHTML.lineWidth = 3;
+            contextHTML.moveTo(xCenterClock, yCenterClock);
+            contextHTML.lineTo(xCenterClock + lengthMinutes * Math.cos(Math.PI / 2 - t_min * (Math.PI / 180)),
+                yCenterClock - lengthMinutes * Math.sin(Math.PI / 2 - t_min * (Math.PI / 180)));
+            contextHTML.stroke();
+            contextHTML.closePath();
+
+            contextHTML.beginPath();
+            contextHTML.lineWidth = 5;
+            contextHTML.moveTo(xCenterClock, yCenterClock);
+            contextHTML.lineTo(xCenterClock + lengthHour * Math.cos(Math.PI / 2 - t_hour * (Math.PI / 180)),
+                yCenterClock - lengthHour * Math.sin(Math.PI / 2 - t_hour * (Math.PI / 180)));
+            contextHTML.stroke();
+            contextHTML.closePath();
+
+            contextHTML.beginPath();
+            contextHTML.strokeStyle = "#FF4500";
+            contextHTML.fillStyle = "#FF8C00";
+            contextHTML.lineWidth = 3;
+            contextHTML.arc(xCenterClock, yCenterClock, 5, 0, 2 * Math.PI, true);
+            contextHTML.stroke();
+            contextHTML.fill();
+            contextHTML.closePath();
+        }
+
+        function updateDigitalClock()
+        {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU');
+            const dateString = now.toLocaleDateString('ru-RU');
+
+            /*const dayString = now.toLocaleString('ru-RU', { weekday: 'long' });*/
+
+            const dayIndex = now.getDay(); // 0 (Воскресенье) до 6 (Суббота)
+
+            const funDays =
+                [
+                "Воскресенье (День отдыха 😴)",
+                "Понедельник (Начало... 🔥)",
+                "Вторник (Почти понедельник 🧐)",
+                "Среда (Малая пятница 🥳)",
+                "Четверг (Пятница близко! 🚀)",
+                "Пятница (УРА! 🎉)",
+                "Суббота (Свобода! 🏝️)"
+                ];
+
+            const dayString = funDays[dayIndex];
+
+            // Обновляем цифровые часы
+            document.getElementById('digital-time-output').textContent = timeString;
+
+            // Обновляем наложенные на кота элементы (для демонстрации, что они работают)
+            document.getElementById('time-overlay').textContent = timeString;
+            document.getElementById('date-overlay').textContent = dateString;
+            document.getElementById('day-overlay').textContent = dayString;
+        }
+
+        // **ФУНКЦИЯ ПЕРЕКЛЮЧЕНИЯ**
+        function toggleClockType()
+        {
+            const isChecked = document.getElementById('clock-toggle').checked;
+
+            // Если включен (т.е. хотим видеть цифровые)
+            if (isChecked) {
+                document.getElementById('myCanvas').style.visibility = 'hidden'; // Скрыть аналоговые
+                document.getElementById('digital-display').style.display = 'block'; // Показать цифровые
+            } else {
+                // Если выключен (т.е. хотим видеть аналоговые)
+                document.getElementById('myCanvas').style.visibility = 'visible';
+                document.getElementById('digital-display').style.display = 'none';
+            }
+        }
+
+        // Запуск
+        window.onload = function ()
+        {
+            // Настройка интервала для обновления обеих систем (раз в секунду)
+            window.setInterval(
+                function ()
+                {
+                    updateDigitalClock(); // Обновляет и цифровой дисплей, и накладки на коте
+                    displayCanvas();       // Перерисовывает аналоговые часы
+                }
+            , 1000);
+
+            // Запуск при загрузке (изначально показываем аналоговые)
+            updateDigitalClock();
+            displayCanvas();
+
+            // Убедимся, что по умолчанию аналоговые часы видны, а цифровые скрыты
+            document.getElementById('clock-toggle').checked = false;
+            toggleClockType();
+        }
+    </script>
+</body>
+</html>
