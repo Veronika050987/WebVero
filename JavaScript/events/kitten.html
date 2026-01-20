@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Kitten</title>
+    <link rel="stylesheet" href="kitten.css">
+</head>
+<body>
+    <div id="clock-container">
+
+        <!-- КОТ (HTML-структура) -->
+        <div class="cat">
+            <div class="ear ear--left"></div>
+            <div class="ear ear--right"></div>
+
+            <div class="face">
+                <div class="eye eye--left">
+                    <div class="eye-pupil"></div>
+                </div>
+                <div class="eye eye--right">
+                    <div class="eye-pupil"></div>
+                </div>
+
+                <div class="mouth"></div>
+
+                <div class="muzzle"></div>
+            </div>
+        </div>
+
+        <!-- ЭЛЕМЕНТ ДЛЯ ВЫВОДА ЦИФРОВОГО ВРЕМЕНИ ПОВЕРХ КОТА -->
+        <div id="time-output">--:--:--</div>
+
+    </div>
+
+    <script>
+        function updateTimeOverlay()
+        {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('ru-RU'); // ЧЧ:ММ:СС
+
+            // Обновляем элемент времени, наложенный на кота
+            document.getElementById('time-output').textContent = timeString;
+        }
+
+        setInterval(updateTimeOverlay, 1000);
+        updateTimeOverlay();
+    </script>
+
+</body>
+</html>
