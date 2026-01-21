@@ -58,7 +58,8 @@ document.addEventListener
 function addLeadingZero(number) {
     return number < 10 ? "0" + number : number;
 }
-document.body.onload = function tick_timer() {
+document.body.onload = function tick_timer()
+{
     let time = new Date();
     document.getElementById("full-time").innerHTML = time;
     document.getElementById("hours").innerHTML = addLeadingZero(time.getHours());
@@ -75,4 +76,62 @@ document.body.onload = function tick_timer() {
     document.getElementById('day-of-week').style.visibility = document.getElementById('show-weekday').checked ? "visible" : "hidden";
 
     setTimeout(tick_timer, 100);
+}
+
+document.getElementById("btn-start").onclick = function startCountdownTimer()
+{
+    let targetDate = document.getElementById("target-date");
+    let targetTime = document.getElementById("target-time");
+    let btnStart = document.getElementById("btn-start");
+    if (btnStart.value === "Start") {
+        btnStart.value = "Stop";
+        targetDate.disabled = targetTime.disabled = true;
+        tickCountdown();
+    }
+    else {
+        btnStart.value = "Start";
+        targetDate.disabled = targetTime.disabled = false;
+    }
+}
+function tickCountdown()
+{
+    let now = new Date();
+
+    let targetDateControl = document.getElementById("target-date");
+    let targetTimeControl = document.getElementById("target-time");
+
+    let targetDateValue = targetDateControl.valueAsDate;
+    let targetTimeValue = targetTimeControl.valueAsDate;
+    //Выравниваем часовой пояс:
+    targetDateValue.setHours(targetDateValue.getHours() + targetDateValue.getTimezoneOffset() / 60);
+    targetTimeValue.setHours(targetTimeValue.getHours() + targetTimeValue.getTimezoneOffset() / 60);
+
+    document.getElementById("duration").innerHTML = typeof (targetTimeValue);
+    targetTimeValue.setFullYear(targetDateValue.getFullYear());
+    targetTimeValue.setMonth(targetDateValue.getMonth());
+    targetTimeValue.setDate(targetDateValue.getDate());
+
+    document.getElementById("target-date-value").innerHTML = targetDateValue;
+    document.getElementById("target-time-value").innerHTML = targetTimeValue;
+    document.getElementById("current-time-value").innerHTML = now;
+
+    //console.log(`${targetDateValue}\t${targetTimeValue}`);
+
+    let duration = targetTimeValue - now;
+    document.getElementById("duration").innerHTML = duration;
+
+    let timestamp = Math.trunc(duration / 1000);
+    document.getElementById("timestamp").innerHTML = timestamp;
+
+    const SECONDS_PER_MINUTE = 60;
+    const SECONDS_PER_HOUR = 3600;  //kmph - Kilometers per Hour;
+    const SECONDS_PER_DAY = 86400;
+    const SECONDS_PER_WEEK = SECONDS_PER_DAY * 7;
+    const DAYS_PER_MONTH = 365.25 / 12;
+    const SECONDS_PER_MONTH = SECONDS_PER_DAY * DAYS_PER_MONTH;
+    const SECONDS_PER_YEAR = SECONDS_PER_DAY * 365 + SECONDS_PER_HOUR * 6;
+
+
+
+    setTimeout(tickCountdown, 100);
 }
