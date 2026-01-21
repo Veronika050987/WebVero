@@ -82,7 +82,7 @@ input {
 /*--------------------------------------------*/
 #display 
 {
-    border: solid 1px;
+    border: solid 3px green;
     margin: 10px;
     padding: 10px;
     display: flex;
