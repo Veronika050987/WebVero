@@ -1,4 +1,4 @@
-// JavaScript source code
+п»ї// JavaScript source code
 function setImage() {
     let filename = document.getElementById("image-file");
     let reader = new FileReader();
@@ -102,7 +102,7 @@ function tickCountdown()
 
     let targetDateValue = targetDateControl.valueAsDate;
     let targetTimeValue = targetTimeControl.valueAsDate;
-    //Выравниваем часовой пояс:
+    //Р’С‹СЂР°РІРЅРёРІР°РµРј С‡Р°СЃРѕРІРѕР№ РїРѕСЏСЃ:
     targetDateValue.setHours(targetDateValue.getHours() + targetDateValue.getTimezoneOffset() / 60);
     targetTimeValue.setHours(targetTimeValue.getHours() + targetTimeValue.getTimezoneOffset() / 60);
 
