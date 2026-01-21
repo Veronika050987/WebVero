@@ -83,12 +83,14 @@ document.getElementById("btn-start").onclick = function startCountdownTimer()
     let targetDate = document.getElementById("target-date");
     let targetTime = document.getElementById("target-time");
     let btnStart = document.getElementById("btn-start");
-    if (btnStart.value === "Start") {
+    if (btnStart.value === "Start")
+    {
         btnStart.value = "Stop";
         targetDate.disabled = targetTime.disabled = true;
         tickCountdown();
     }
-    else {
+    else
+    {
         btnStart.value = "Start";
         targetDate.disabled = targetTime.disabled = false;
     }
@@ -96,42 +98,130 @@ document.getElementById("btn-start").onclick = function startCountdownTimer()
 function tickCountdown()
 {
     let now = new Date();
-
     let targetDateControl = document.getElementById("target-date");
     let targetTimeControl = document.getElementById("target-time");
+    let btnStart = document.getElementById("btn-start");
 
-    let targetDateValue = targetDateControl.valueAsDate;
-    let targetTimeValue = targetTimeControl.valueAsDate;
-    //Выравниваем часовой пояс:
-    targetDateValue.setHours(targetDateValue.getHours() + targetDateValue.getTimezoneOffset() / 60);
-    targetTimeValue.setHours(targetTimeValue.getHours() + targetTimeValue.getTimezoneOffset() / 60);
+    if (btnStart.value === "Stop") {
 
-    document.getElementById("duration").innerHTML = typeof (targetTimeValue);
-    targetTimeValue.setFullYear(targetDateValue.getFullYear());
-    targetTimeValue.setMonth(targetDateValue.getMonth());
-    targetTimeValue.setDate(targetDateValue.getDate());
+        let targetDateValue = targetDateControl.valueAsDate;
+        let targetTimeValue = targetTimeControl.valueAsDate;
 
-    document.getElementById("target-date-value").innerHTML = targetDateValue;
-    document.getElementById("target-time-value").innerHTML = targetTimeValue;
-    document.getElementById("current-time-value").innerHTML = now;
+        if (!targetDateValue || !targetTimeValue)
+        {
+            btnStart.value = "Start";
+            targetDateControl.disabled = targetTimeControl.disabled = false;
+            document.getElementById("display").innerHTML = "Please select date and time!";
+            return;
+        }
 
-    //console.log(`${targetDateValue}\t${targetTimeValue}`);
+        // Корректируем дату цели на основе вводимого времени (для консистентности)
+        targetTimeValue.setFullYear(targetDateValue.getFullYear());
+        targetTimeValue.setMonth(targetDateValue.getMonth());
+        targetTimeValue.setDate(targetDateValue.getDate());
 
-    let duration = targetTimeValue - now;
-    document.getElementById("duration").innerHTML = duration;
+        // --- Проверка завершения ---
+        let duration = targetTimeValue.getTime() - now.getTime();
+        if (duration <= 0)
+        {
+            document.getElementById("display").innerHTML = "Time's up!";
+            btnStart.value = "Start";
+            targetDateControl.disabled = targetTimeControl.disabled = false;
+            // Сброс счетчиков в 00:00:00
+            document.getElementById("hours-unit").innerHTML = "00";
+            document.getElementById("minutes-unit").innerHTML = "00";
+            document.getElementById("seconds-unit").innerHTML = "00";
+            return;
+        }
 
-    let timestamp = Math.trunc(duration / 1000);
-    document.getElementById("timestamp").innerHTML = timestamp;
+        // --- Инициализация переменных для результата ---
+        let years = 0;
+        let months = 0;
+        let days = 0;
+        let hours = 0;
+        let minutes = 0;
+        let seconds = 0;
 
-    const SECONDS_PER_MINUTE = 60;
-    const SECONDS_PER_HOUR = 3600;  //kmph - Kilometers per Hour;
-    const SECONDS_PER_DAY = 86400;
-    const SECONDS_PER_WEEK = SECONDS_PER_DAY * 7;
-    const DAYS_PER_MONTH = 365.25 / 12;
-    const SECONDS_PER_MONTH = SECONDS_PER_DAY * DAYS_PER_MONTH;
-    const SECONDS_PER_YEAR = SECONDS_PER_DAY * 365 + SECONDS_PER_HOUR * 6;
+        // Создаем рабочую копию текущего времени
+        let calculationNow = new Date(now.getTime());
+
+        // --- 1. Вычисляем ГОДЫ ---
+        let tempDate = new Date(calculationNow.getTime());
+        while (true) {
+            tempDate.setFullYear(calculationNow.getFullYear() + years + 1);
+            if (tempDate.getTime() > targetTimeValue.getTime())
+            {
+                break;
+            }
+            years++;
+        }
+
+        // --- 2. Вычисляем МЕСЯЦЫ ---
+        // Начинаем расчет с года, который мы только что посчитали
+        calculationNow.setFullYear(calculationNow.getFullYear() + years);
+
+        let currentMonth = calculationNow.getMonth();
+        let targetMonth = targetTimeValue.getMonth();
+        let targetYear = targetTimeValue.getFullYear();
+
+        while (true) {
+            let nextMonthDate = new Date(calculationNow.getTime());
+            nextMonthDate.setMonth(currentMonth + 1);
+
+            // Если следующий месяц уже в другом году ИЛИ мы перескакиваем цель
+            let nextMonthYear = nextMonthDate.getFullYear();
+            let targetYearMatch = nextMonthYear === targetYear;
+            let nextMonthExceedsTarget = (nextMonthYear === targetYear && nextMonthDate.getMonth() > targetMonth) || (nextMonthYear > targetYear);
+
+            if (nextMonthExceedsTarget) {
+                break;
+            }
+
+            // Если следующий месяц совпадает с целевым месяцем и годом, но день/время уже позади, ломаемся
+            if (nextMonthYear === targetYear && nextMonthDate.getMonth() === targetMonth) {
+                // Проверяем, перескочили ли мы целевое время в этот месяц
+                if (nextMonthDate.getTime() > targetTimeValue.getTime()) {
+                    break;
+                }
+            }
+
+            calculationNow = nextMonthDate;
+            months++;
+            currentMonth = calculationNow.getMonth();
+        }
+
+        // --- 3. Оставшееся время (Дни, Часы, Минуты, Секунды) ---
+
+        let remainingDurationMs = targetTimeValue.getTime() - calculationNow.getTime();
+        let totalSeconds = Math.trunc(remainingDurationMs / 1000);
+
+        const SECONDS_PER_DAY = 86400;
+        const SECONDS_PER_HOUR = 3600;
+        const SECONDS_PER_MINUTE = 60;
+
+        // Дни (остаток после годов и месяцев)
+        days = Math.floor(totalSeconds / SECONDS_PER_DAY);
+        let remainingSecondsAfterDays = totalSeconds % SECONDS_PER_DAY;
+
+        // Часы
+        hours = Math.floor(remainingSecondsAfterDays / SECONDS_PER_HOUR);
+        let remainingSecondsAfterHours = remainingSecondsAfterDays % SECONDS_PER_HOUR;
+
+        // Минуты
+        minutes = Math.floor(remainingSecondsAfterHours / SECONDS_PER_MINUTE);
+
+        // Секунды
+        seconds = remainingSecondsAfterHours % SECONDS_PER_MINUTE;
 
 
+        // --- Отображение результата ---
+        document.getElementById("years-unit").innerHTML = addLeadingZero(years);
+        document.getElementById("months-unit").innerHTML = addLeadingZero(months);
+        document.getElementById("days-unit").innerHTML = addLeadingZero(days); // <-- Дни тоже нужно отображать
+        document.getElementById("hours-unit").innerHTML = addLeadingZero(hours);
+        document.getElementById("minutes-unit").innerHTML = addLeadingZero(minutes);
+        document.getElementById("seconds-unit").innerHTML = addLeadingZero(seconds);
 
-    setTimeout(tickCountdown, 100);
+        setTimeout(tickCountdown, 100);
+    }
 }
