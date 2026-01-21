@@ -96,42 +96,65 @@ document.getElementById("btn-start").onclick = function startCountdownTimer()
 function tickCountdown()
 {
     let now = new Date();
-
     let targetDateControl = document.getElementById("target-date");
     let targetTimeControl = document.getElementById("target-time");
+    let btnStart = document.getElementById("btn-start");
 
-    let targetDateValue = targetDateControl.valueAsDate;
-    let targetTimeValue = targetTimeControl.valueAsDate;
-    //Выравниваем часовой пояс:
-    targetDateValue.setHours(targetDateValue.getHours() + targetDateValue.getTimezoneOffset() / 60);
-    targetTimeValue.setHours(targetTimeValue.getHours() + targetTimeValue.getTimezoneOffset() / 60);
+    // *** КЛЮЧЕВАЯ ПРОВЕРКА: Продолжать только если кнопка в состоянии "Stop" ***
+    if (btnStart.value === "Stop")
+    {
 
-    document.getElementById("duration").innerHTML = typeof (targetTimeValue);
-    targetTimeValue.setFullYear(targetDateValue.getFullYear());
-    targetTimeValue.setMonth(targetDateValue.getMonth());
-    targetTimeValue.setDate(targetDateValue.getDate());
+        let targetDateValue = targetDateControl.valueAsDate;
+        let targetTimeValue = targetTimeControl.valueAsDate;
 
-    document.getElementById("target-date-value").innerHTML = targetDateValue;
-    document.getElementById("target-time-value").innerHTML = targetTimeValue;
-    document.getElementById("current-time-value").innerHTML = now;
+        // Проверка, выбраны ли дата и время
+        if (!targetDateValue || !targetTimeValue)
+        {
+            // Если данные некорректны или пусты, останавливаем
+            btnStart.value = "Start";
+            targetDateControl.disabled = targetTimeControl.disabled = false;
+            document.getElementById("display").innerHTML = "Please select date and time!";
+            return;
+        }
+        targetDateValue.setHours(targetDateValue.getHours() + targetDateValue.getTimezoneOffset() / 60);
+        targetTimeValue.setHours(targetTimeValue.getHours() + targetTimeValue.getTimezoneOffset() / 60);
 
-    //console.log(`${targetDateValue}\t${targetTimeValue}`);
+        targetTimeValue.setFullYear(targetDateValue.getFullYear());
+        targetTimeValue.setMonth(targetDateValue.getMonth());
+        targetTimeValue.setDate(targetDateValue.getDate());
 
-    let duration = targetTimeValue - now;
-    document.getElementById("duration").innerHTML = duration;
+        let duration = targetTimeValue - now;
 
-    let timestamp = Math.trunc(duration / 1000);
-    document.getElementById("timestamp").innerHTML = timestamp;
+        // Проверка: Время вышло?
+        if (duration <= 0)
+        {
+            document.getElementById("display").innerHTML = "Time's up!";
+            btnStart.value = "Start";
+            targetDateControl.disabled = targetTimeControl.disabled = false;
+            // Сброс счетчиков в 00:00:00
+            document.getElementById("hours-unit").innerHTML = "00";
+            document.getElementById("minutes-unit").innerHTML = "00";
+            document.getElementById("seconds-unit").innerHTML = "00";
+            return;
+        }
 
-    const SECONDS_PER_MINUTE = 60;
-    const SECONDS_PER_HOUR = 3600;  //kmph - Kilometers per Hour;
-    const SECONDS_PER_DAY = 86400;
-    const SECONDS_PER_WEEK = SECONDS_PER_DAY * 7;
-    const DAYS_PER_MONTH = 365.25 / 12;
-    const SECONDS_PER_MONTH = SECONDS_PER_DAY * DAYS_PER_MONTH;
-    const SECONDS_PER_YEAR = SECONDS_PER_DAY * 365 + SECONDS_PER_HOUR * 6;
+        // Расчет часов, минут, секунд (как в предыдущем ответе)
+        let totalSeconds = Math.trunc(duration / 1000);
 
+        const SECONDS_PER_HOUR = 3600;
+        const SECONDS_PER_MINUTE = 60;
 
+        let hours = Math.floor(totalSeconds / SECONDS_PER_HOUR);
+        let remainingSecondsAfterHours = totalSeconds % SECONDS_PER_HOUR;
+        let minutes = Math.floor(remainingSecondsAfterHours / SECONDS_PER_MINUTE);
+        let seconds = remainingSecondsAfterHours % SECONDS_PER_MINUTE;
 
-    setTimeout(tickCountdown, 100);
+        // Отображение
+        document.getElementById("hours-unit").innerHTML = addLeadingZero(hours);
+        document.getElementById("minutes-unit").innerHTML = addLeadingZero(minutes);
+        document.getElementById("seconds-unit").innerHTML = addLeadingZero(seconds);
+
+        // Рекурсивный вызов для продолжения отсчета
+        setTimeout(tickCountdown, 100);
+    }
 }
