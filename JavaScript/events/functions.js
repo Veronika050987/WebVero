@@ -316,3 +316,34 @@ function resetDisplay()
         display.children[0].remove();
     //removeTimeBlock("days");
 }
+
+function setDisplayBackground(imagePath)
+{
+    const displayDiv = document.getElementById("display");
+
+    if (displayDiv)
+    {
+        // Устанавливаем фоновое изображение
+        displayDiv.style.backgroundImage = `url('${imagePath}')`;
+
+        // Настраиваем, как изображение должно отображаться
+        displayDiv.style.backgroundSize = "cover";       // Масштабирует изображение, чтобы оно полностью покрыло контейнер
+        displayDiv.style.backgroundPosition = "center";  // Центрирует изображение
+        displayDiv.style.backgroundRepeat = "no-repeat"; // Запрещает повторение
+
+    }
+    else
+    {
+        console.error("Элемент с ID 'display' не найден.");
+    }
+}
+
+// --- Вызов функции при загрузке ---
+
+const defaultBackgroundImage = 'img/field.gif';
+
+document.addEventListener('DOMContentLoaded', function ()
+{
+    // Устанавливаем фон при загрузке DOM
+    setDisplayBackground(defaultBackgroundImage);
+});
