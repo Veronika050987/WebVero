@@ -124,20 +124,15 @@ document.getElementById("btn-start").onclick = function startCountdownTimer() {
 const audioPlayer = document.getElementById("player");
 const melodySelector = document.getElementById("melody-selector");
 
-// 1. Функция для смены трека при выборе в ComboBox
 melodySelector.addEventListener('change', function ()
 {
     const selectedValue = this.value;
 
     if (selectedValue !== "none")
     {
-        // Устанавливаем новый источник звука
         audioPlayer.src = selectedValue;
-        // Принудительно перезагружаем, чтобы изменения вступили в силу
-        audioPlayer.load();
 
-        // Опционально: сразу начинаем воспроизведение
-        // audioPlayer.play().catch(error => console.log("Автовоспроизведение заблокировано браузером"));
+        audioPlayer.load();
     }
     else
     {
