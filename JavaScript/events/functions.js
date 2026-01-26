@@ -1,13 +1,16 @@
 ﻿// JavaScript source code
-function setImage() {
+function setImage()
+{
     let filename = document.getElementById("image-file");
     let reader = new FileReader();
-    reader.onload = function (e) {
+    reader.onload = function (e)
+    {
         document.getElementById("photo").src = e.target.result;
     }
     reader.readAsDataURL(filename.files[0]);
 }
-function setBackground() {
+function setBackground()
+{
     let color_tool = document.getElementById('choose-color');
     let color = color_tool.value;
     //document.body.style.backgroundImage = "none";
@@ -16,7 +19,8 @@ function setBackground() {
     document.getElementById('color-sample').style.width = "200px";
     document.getElementById('color-sample').style.height = "200px";
 }
-function switchBackground() {
+function switchBackground()
+{
     //let target = document.getElementById("switch-background").src;
     //let path = target.split('/');
     //let file = path[path.length - 1];
@@ -44,7 +48,8 @@ function switchBackground() {
 document.addEventListener
     (
         "mousemove",
-        function (event) {
+        function (event)
+        {
             let x = event.clientX;
             let y = event.clientY;
             document.getElementById("mouse").innerHTML = `X = ${x}, Y = ${y}`;
@@ -52,7 +57,8 @@ document.addEventListener
     );
 ///////////////////////////////////////////////////////////////////////////////////
 //DOM - Document Object Model
-function addLeadingZero(number) {
+function addLeadingZero(number)
+{
     //numer = Number(number);
     return number < 10 ? "0" + `${number}` : `${number}`;
 }
@@ -78,12 +84,14 @@ document.getElementById("btn-start").onclick = function startCountdownTimer() {
     let targetDate = document.getElementById("target-date");
     let targetTime = document.getElementById("target-time");
     let btnStart = document.getElementById("btn-start");
-    if (btnStart.value === "Start") {
+    if (btnStart.value === "Start")
+    {
         btnStart.value = "Stop";
         targetDate.disabled = targetTime.disabled = true;
         tickCountdown();
     }
-    else {
+    else
+    {
         btnStart.value = "Start";
         targetDate.disabled = targetTime.disabled = false;
         clearTimeout(tickCountdown);
@@ -112,7 +120,33 @@ document.getElementById("btn-start").onclick = function startCountdownTimer() {
     //after.innerHTML = "Сюда нужно будет прикрутить музон";
     //display.after(after);
 }
-function tickCountdown() {
+
+const audioPlayer = document.getElementById("player");
+const melodySelector = document.getElementById("melody-selector");
+
+// 1. Функция для смены трека при выборе в ComboBox
+melodySelector.addEventListener('change', function ()
+{
+    const selectedValue = this.value;
+
+    if (selectedValue !== "none")
+    {
+        // Устанавливаем новый источник звука
+        audioPlayer.src = selectedValue;
+        // Принудительно перезагружаем, чтобы изменения вступили в силу
+        audioPlayer.load();
+
+        // Опционально: сразу начинаем воспроизведение
+        // audioPlayer.play().catch(error => console.log("Автовоспроизведение заблокировано браузером"));
+    }
+    else
+    {
+        audioPlayer.src = "";
+        audioPlayer.load();
+    }
+});
+function tickCountdown()
+{
     if (document.getElementById("btn-start").value === "Start") return;
     let now = new Date();
 
@@ -157,10 +191,12 @@ function tickCountdown() {
     date = date * SECONDS_PER_DAY;
 
     let years = Math.floor(date / SECONDS_PER_YEAR);
-    if (years > 0) {
+    if (years > 0)
+    {
         date = date % SECONDS_PER_YEAR;
         let years_unit = document.getElementById("years-unit");
-        if (years_unit == null) {
+        if (years_unit == null)
+        {
             //let display = document.getElementById("display");
             //display.prepend(createTimeBlock("years", addLeadingZero(years)));
 
@@ -175,11 +211,13 @@ function tickCountdown() {
     else removeTimeBlock("years");
 
     let months = Math.floor(date / SECONDS_PER_MONTH);
-    if (months > 0) {
+    if (months > 0)
+    {
         //let display = document.getElementById("display");
         date = date % SECONDS_PER_MONTH;
         let months_unit = document.getElementById("months-unit");
-        if (months_unit == null) {
+        if (months_unit == null)
+        {
             months_block = createTimeBlock("months", addLeadingZero(months));
             let hours_block = document.getElementById("hours-unit").parentElement;
             hours_block.before(months_block);
@@ -189,10 +227,12 @@ function tickCountdown() {
     else removeTimeBlock("months");
 
     let weeks = Math.floor(date / SECONDS_PER_WEEK);
-    if (weeks > 0) {
+    if (weeks > 0)
+    {
         date = date % SECONDS_PER_WEEK;
         let weeks_unit = document.getElementById("weeks-unit");
-        if (weeks_unit == null) {
+        if (weeks_unit == null)
+        {
             weeks_block = createTimeBlock("weeks", addLeadingZero(weeks));
             let hours_block = document.getElementById("hours-unit").parentElement;
             hours_block.before(weeks_block);
@@ -202,9 +242,11 @@ function tickCountdown() {
     else removeTimeBlock("weeks");
 
     let days = Math.floor(date / SECONDS_PER_DAY);
-    if (days > 0) {
+    if (days > 0)
+    {
         let days_unit = document.getElementById("days-unit");
-        if (days_unit == null) {
+        if (days_unit == null)
+        {
             days_block = createTimeBlock("days", addLeadingZero(days));
             let hours_block = document.getElementById("hours-unit").parentElement;
             hours_block.before(days_block);
@@ -229,13 +271,14 @@ function tickCountdown() {
     //if (timestamp > 0 && document.getElementById("btn-start").value === "Stop")
     if (document.getElementById("btn-start").value === "Stop")
         setTimeout(tickCountdown, 100);
-    if (timestamp == 0) {
-        let player = document.getElementById("player");
-        player.play();
+    if (timestamp == 0)
+    {
+        audioPlayer.play().catch(error => console.log("Воспроизведение по окончании таймера заблокировано:", error));
     }
 }
 
-function createTimeBlock(name, value) {
+function createTimeBlock(name, value)
+{
     let time_block = document.createElement("div");
     time_block.className = "time-block";
 
@@ -256,15 +299,18 @@ function createTimeBlock(name, value) {
 
     return time_block;
 }
-function removeTimeBlock(name) {
+function removeTimeBlock(name)
+{
     let unit = document.getElementById(`${name}-unit`);
-    if (unit != null) {
+    if (unit != null)
+    {
         let block = unit.parentElement;
         let display = block.parentElement;
         display.removeChild(block);
     }
 }
-function resetDisplay() {
+function resetDisplay()
+{
     let display = document.getElementById("display");
     //display.innerHTML = "";
     console.log(display.children.length);
