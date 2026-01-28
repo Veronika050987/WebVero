@@ -5,20 +5,29 @@ function Move()
     const elem = document.getElementById("animation");
     const container = document.getElementById("container");
 
-    var x_pos = 0;// Вертикальная позиция (относительно верха)
-    var y_pos = 0;// Горизонтальная позиция (относительно левого края)
+    // Инициализация или восстановление позиции
+    var x_pos = parseInt(elem.style.top) || 0;
+    var y_pos = parseInt(elem.style.left) || 0;
 
-    var x_shift = 1;
-    var y_shift = 1;
+    // Инициализация или восстановление сдвигов (если они были сохранены в data-атрибутах)
+    var x_shift = parseInt(elem.dataset.x_shift) || 1;
+    var y_shift = parseInt(elem.dataset.y_shift) || 1;
 
     clearInterval(id);
 
     let interval = parseInt(document.getElementById("interval").value);
+    if (isNaN(interval) || interval < 1) {
+        interval = 5; // Минимальное безопасное значение
+    }
+
+    // Важно: Убедитесь, что сам блок анимации отражает размер шрифта при старте
+    changeFontSize();
+
     id = setInterval(frame, interval);
+
     function frame()
     {
-        // Получаем размеры контейнера и элемента внутри цикла,
-        // так как они могут меняться (хотя в данном случае вряд ли)
+        // Размеры
         const containerWidth = container.clientWidth;
         const containerHeight = container.clientHeight;
         const elemWidth = elem.offsetWidth;
@@ -32,40 +41,59 @@ function Move()
         elem.style.top = x_pos + 'px';
         elem.style.left = y_pos + 'px';
 
-        // Логика отскока от границ контейнера
+        // Логика отскока от границ контейнера (используем текущие x_pos/y_pos)
 
         // Проверка вертикальной границы (TOP/BOTTOM)
-        if (x_pos + elemHeight >= containerHeight)
-        {
-            // Достигнут нижний край
+        if (x_pos + elemHeight >= containerHeight) {
             x_shift = -1;
+            x_pos = containerHeight - elemHeight; // Корректируем позицию, чтобы не "застревать"
         }
-        else if (x_pos <= 0)
-        {
-            // Достигнут верхний край
+        else if (x_pos <= 0) {
             x_shift = 1;
+            x_pos = 0;
         }
 
         // Проверка горизонтальной границы (LEFT/RIGHT)
-        if (y_pos + elemWidth >= containerWidth)
-        {
-            // Достигнут правый край
+        if (y_pos + elemWidth >= containerWidth) {
             y_shift = -1;
+            y_pos = containerWidth - elemWidth; // Корректируем позицию
         }
-        else if (y_pos <= 0)
-        {
-            // Достигнут левый край
+        else if (y_pos <= 0) {
             y_shift = 1;
+            y_pos = 0;
         }
+
+        // Сохраняем позицию и сдвиги для следующего шага (важно для сохранения состояния при повторных вызовах Move)
+        elem.style.top = x_pos + 'px';
+        elem.style.left = y_pos + 'px';
+        elem.dataset.x_shift = x_shift;
+        elem.dataset.y_shift = y_shift;
     }
 }
-
 function updateTimeOverlay()
 {
     const now = new Date();
     const timeString = now.toLocaleTimeString('ru-RU'); // ЧЧ:ММ:СС
 
-    document.getElementById('time-output').textContent = timeString;
+    const timeOutput = document.getElementById('time-output');
+    if (timeOutput)
+    {
+        timeOutput.textContent = timeString;
+    }
+}
+function changeFontSize()
+{
+    const fontSizeInput = document.getElementById('font-size');
+    const timeOutputElement = document.getElementById('time-output');
+    const animationElement = document.getElementById('animation'); // Получаем сам контейнер анимации
+
+    if (fontSizeInput && timeOutputElement)
+    {
+        const newSize = fontSizeInput.value;
+
+        // Устанавливаем новый размер шрифта в пикселях
+        timeOutputElement.style.fontSize = newSize + 'px';
+    }
 }
 
 setInterval(updateTimeOverlay, 1000);

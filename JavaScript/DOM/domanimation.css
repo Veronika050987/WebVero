@@ -19,4 +19,7 @@
     font-size: 18px;
     top: 0; /* Начальная позиция */
     left: 0; /* Начальная позиция */
+    display: flex;
+    justify-content: center; /* Центрирование по горизонтали (left/right) */
+    align-items: center; /* Центрирование по вертикали (top/bottom) */
 }
