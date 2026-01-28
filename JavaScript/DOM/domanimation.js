@@ -1,5 +1,33 @@
 ﻿// JavaScript source code
 var id = null;
+
+function setDisplayBackground(imagePath) {
+    const displayDiv = document.getElementById("container");
+
+    if (displayDiv) {
+        // Устанавливаем фоновое изображение
+        displayDiv.style.backgroundImage = `url('${imagePath}')`;
+
+        // Настраиваем, как изображение должно отображаться
+        displayDiv.style.backgroundSize = "cover";       // Масштабирует изображение, чтобы оно полностью покрыло контейнер
+        displayDiv.style.backgroundPosition = "center";  // Центрирует изображение
+        displayDiv.style.backgroundRepeat = "no-repeat"; // Запрещает повторение
+
+    }
+    else {
+        console.error("Элемент с ID 'container' не найден.");
+    }
+}
+
+// --- Вызов функции при загрузке ---
+
+const defaultBackgroundImage = 'img/night.jpg';
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Устанавливаем фон при загрузке DOM
+    setDisplayBackground(defaultBackgroundImage);
+});
+
 function Move()
 {
     const elem = document.getElementById("animation");

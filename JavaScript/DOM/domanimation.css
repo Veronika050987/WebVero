@@ -9,17 +9,12 @@
     overflow: hidden; /* Чтобы элемент не вылезал за границы при сложных расчетах */
 }
 
-#animation 
+/*#animation 
 {
     width: 150px;
     height: 50px;
     position: absolute;
-    background: #3CB371;
+    background: red;
     color: yellow;
-    font-size: 18px;
-    top: 0; /* Начальная позиция */
-    left: 0; /* Начальная позиция */
-    display: flex;
-    justify-content: center; /* Центрирование по горизонтали (left/right) */
-    align-items: center; /* Центрирование по вертикали (top/bottom) */
 }
+*/
