@@ -19,8 +19,6 @@ function setDisplayBackground(imagePath) {
     }
 }
 
-// --- Вызов функции при загрузке ---
-
 const defaultBackgroundImage = 'img/night.jpg';
 
 document.addEventListener('DOMContentLoaded', function () {
