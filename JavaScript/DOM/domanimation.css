@@ -1,9 +1,12 @@
 ﻿#container 
 {
-    width: 400px;
-    height: 400px;
+    /* width: 400px;
+    height: 400px;*/
+    width: 98vw;
+    height: 92vh;
     position: relative;
     background: #D8BFD8;
+    overflow: hidden; /* Чтобы элемент не вылезал за границы при сложных расчетах */
 }
 
 #animation 
@@ -13,5 +16,7 @@
     position: absolute;
     background: #3CB371;
     color: yellow;
-    font-size:18px;
+    font-size: 18px;
+    top: 0; /* Начальная позиция */
+    left: 0; /* Начальная позиция */
 }
