@@ -1,4 +1,4 @@
-// JavaScript source code
+﻿// JavaScript source code
 var id = null;
 function Move()
 {
@@ -14,7 +14,8 @@ function Move()
     //}
     let interval = document.getElementById("interval").value;
     id = setInterval(frame, interval);
-    function frame() {
+    function frame()
+    {
         //if (pos == 250) clearInterval(id);
         //else
         //{
@@ -29,3 +30,14 @@ function Move()
 
     }
 }
+
+function updateTimeOverlay()
+{
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('ru-RU'); // ЧЧ:ММ:СС
+
+    document.getElementById('time-output').textContent = timeString;
+}
+
+setInterval(updateTimeOverlay, 1000);
+updateTimeOverlay();
